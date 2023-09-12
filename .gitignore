@@ -135,3 +135,5 @@ weights/
 
 # tensorboard
 runs/
+
+.idea

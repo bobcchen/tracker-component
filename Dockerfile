@@ -56,20 +56,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# install mish_cuda (for ScaledYOLOv4)
-RUN cd / && git clone https://github.com/JunnYu/mish-cuda && cd mish-cuda && python3 setup.py build install
-
 RUN pip3 install --no-cache-dir gdown
-
-# install ScaledYOLOv4
-RUN cd / && \
-    git clone https://github.com/yhsmiley/ScaledYOLOv4 && \
-    cd ScaledYOLOv4 && \
-    git checkout d9420e432a5aaca9ff50a9c5857aa9f251828126 && \
-    cd scaledyolov4/weights && \
-    bash get_weights.sh && \
-    cd ../.. && \
-    pip3 install --no-cache-dir -e .
 
 # install DeepSORT
 RUN cd / && \
@@ -81,9 +68,5 @@ RUN cd / && \
     cd ../../.. && \
     pip3 install --no-cache-dir -e .
 
-# minimal Dockerfile which expects to receive build-time arguments, and creates a new user called “user” (put at end of Dockerfile)
-ARG USER_ID
-ARG GROUP_ID
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-USER user
+WORKDIR /app/component
+CMD ["python3", "server.py"]
