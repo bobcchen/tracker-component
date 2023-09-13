@@ -38,6 +38,7 @@ class Component(BaseComponent):
 
     def process(self, frame, all_detections):
         logging.info(f'processing frame id: {self.frame_id}')
+        logging.info(f'all detections: {all_detections}')
         all_tracks = self.tracker.update_tracks(frame=frame, raw_detections=all_detections)
         logging.info(f'all tracks: {all_tracks}')
 
