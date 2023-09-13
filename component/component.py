@@ -3,6 +3,9 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 from drawer import Drawer
 from misc import draw_frame, save_chips
 
+import logging
+from base_component import BaseComponent
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -19,7 +22,7 @@ class Component(BaseComponent):
         self.record_tracks = config.record_tracks
 
         self.drawer = Drawer(color=(255, 0, 0))
-        self.tracker = DeepSort(max_age=30, nn_budget=10)
+        self.tracker = DeepSort(max_age=30, nn_budget=10, embedder='torchreid')
 
         if self.record_tracks:
             self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -38,10 +41,10 @@ class Component(BaseComponent):
         all_tracks = self.tracker.update_tracks(frame=frame, raw_detections=all_detections)
         logging.info(f'all tracks: {all_tracks}')
 
-        if record_tracks:
+        if self.record_tracks:
             threading.Thread(target=draw_frame, args=(frame, all_tracks, self.out_track, self.drawer), daemon=True).start()
 
-        if crop_chips:
+        if self.crop_chips:
             threading.Thread(target=save_chips, args=(frame, self.frame_id, all_tracks, self.chips_save_dir, '0'),
                              daemon=True).start()
 

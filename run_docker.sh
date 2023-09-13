@@ -1,9 +1,13 @@
-WORKSPACE=/media/data/detrack
-# DATA=/media/data/deep_sort_realtime
-# DATA2=/media/data/ScaledYOLOv4
+IMAGE_DIR=/home/user/dev/aipipeline/cv-usecase/pipeline-manager/images
 
-docker run -it \
+docker run -d --rm \
+  --shm-size=2g \
+  --ipc=shareable \
+  --name=pipeline-manager \
+  -v $IMAGE_DIR:/images \
+	cv-pipeline-manager:v1
+
+docker run -it --rm \
 	--gpus all \
-    -w $WORKSPACE \
-	-v $WORKSPACE:$WORKSPACE \
-	detrack
+  --ipc=container:pipeline-manager \
+	tracker-component:v1
