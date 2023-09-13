@@ -4,6 +4,7 @@ from drawer import Drawer
 from misc import save_frame, save_chips
 import cv2
 import threading
+import copy
 
 import logging
 from base_component import BaseComponent
@@ -51,10 +52,10 @@ class Component(BaseComponent):
 
         if len(all_tracks) != 0:
             if self.record_tracks:
-                threading.Thread(target=save_frame, args=(frame, self.frame_id, all_tracks, self.frames_save_dir, self.drawer), daemon=True).start()
+                threading.Thread(target=save_frame, args=(copy.deepcopy(frame), self.frame_id, all_tracks, self.frames_save_dir, self.drawer), daemon=True).start()
 
             if self.crop_chips:
-                threading.Thread(target=save_chips, args=(frame, self.frame_id, all_tracks, self.chips_save_dir, '0'),
+                threading.Thread(target=save_chips, args=(copy.deepcopy(frame), self.frame_id, all_tracks, self.chips_save_dir, '0'),
                                  daemon=True).start()
 
         self.frame_id += 1
