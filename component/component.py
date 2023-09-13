@@ -1,7 +1,7 @@
 from pathlib import Path
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from drawer import Drawer
-from misc import draw_frame, save_chips
+from misc import save_frame, save_chips
 import cv2
 import threading
 
@@ -28,9 +28,11 @@ class Component(BaseComponent):
 
         logging.info(f'Making output folder at: {self.output_dir}')
         if self.record_tracks:
-            self.output_dir.mkdir(parents=True, exist_ok=True)
-            self.out_track_fp = self.output_dir / f'0_inference.avi'
-            self.out_track = cv2.VideoWriter(str(self.out_track_fp), cv2.VideoWriter_fourcc(*'MJPG'), self.infer_fps, (1080, 1920))
+            self.frames_save_dir = self.output_dir / f'0_frames'
+            self.frames_save_dir.mkdir(parents=True, exist_ok=True)
+
+            # self.out_track_fp = self.output_dir / f'0_inference.avi'
+            # self.out_track = cv2.VideoWriter(str(self.out_track_fp), cv2.VideoWriter_fourcc(*'MJPG'), self.infer_fps, (1080, 1920))
 
         if self.crop_chips:
             self.chips_save_dir = self.output_dir / f'0_crops'
@@ -47,11 +49,12 @@ class Component(BaseComponent):
         all_tracks = self.tracker.update_tracks(frame=frame, raw_detections=all_detections)
         logging.info(f'all tracks: {[vars(track) for track in all_tracks]}')
 
-        if self.record_tracks:
-            threading.Thread(target=draw_frame, args=(frame, all_tracks, self.out_track, self.drawer), daemon=True).start()
+        if len(all_tracks) != 0:
+            if self.record_tracks:
+                threading.Thread(target=save_frame, args=(frame, self.frame_id, all_tracks, self.frames_save_dir, self.drawer), daemon=True).start()
 
-        if self.crop_chips:
-            threading.Thread(target=save_chips, args=(frame, self.frame_id, all_tracks, self.chips_save_dir, '0'),
-                             daemon=True).start()
+            if self.crop_chips:
+                threading.Thread(target=save_chips, args=(frame, self.frame_id, all_tracks, self.chips_save_dir, '0'),
+                                 daemon=True).start()
 
         self.frame_id += 1

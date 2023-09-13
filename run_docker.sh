@@ -14,7 +14,7 @@ docker run -d --rm \
 	detector-component:v1 \
 	python server.py --service detector --next_service tracker
 
-docker run -it --rm \
+docker run -it \
 	--gpus all \
   --ipc=container:pipeline-manager \
 	tracker-component:v1 \

@@ -5,6 +5,11 @@ def draw_frame(frame, all_tracks, out_track, drawer):
     drawn_frame = drawer.draw_frame(frame, all_tracks)
     out_track.write(drawn_frame)
 
+def save_frame(frame, frame_count, all_tracks, path, drawer):
+    drawn_frame = drawer.draw_frame(frame, all_tracks)
+    frame_path = path / f'{frame_count}.jpg'
+    cv2.imwrite(str(frame_path), drawn_frame)
+
 
 def save_chips(frame, frame_count, all_tracks, chips_save_dir, cam_name):
     # save all chips in chips_save_dir with camname_id_tracknum_framenum
