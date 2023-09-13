@@ -99,7 +99,7 @@ class BaseComponent(ABC):
 
         # Write to shm
         output_names = []  # TODO: from config
-        if outputs_names:
+        if output_names:
             if len(output_names) == 1:
                 outputs = tuple((outputs, ))
             for i, output_name in enumerate(output_names):
