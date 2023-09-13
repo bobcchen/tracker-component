@@ -36,8 +36,10 @@ class Component(BaseComponent):
         self.frame_id = 0
 
 
-    def process(self, frame, all_detections):
+    def process(self, frame, raw_detections):
         logging.info(f'processing frame id: {self.frame_id}')
+
+        all_detections = [tuple((d[:4], d[4], self.classes_list[int(d[5])])) for d in raw_detections.tolist()]  # TODO change
         logging.info(f'all detections: {all_detections}')
         all_tracks = self.tracker.update_tracks(frame=frame, raw_detections=all_detections)
         logging.info(f'all tracks: {all_tracks}')

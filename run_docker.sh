@@ -5,9 +5,17 @@ docker run -d --rm \
   --ipc=shareable \
   --name=pipeline-manager \
   -v $LOCAL_DIR:/data \
-	cv-pipeline-manager:v1
+	cv-pipeline-manager:v1 \
+	python server.py --servers detector tracker
+
+docker run -d --rm \
+	--gpus all \
+  --ipc=container:pipeline-manager \
+	detector-component:v1 \
+	python server.py --service detector --next_service tracker
 
 docker run -it --rm \
 	--gpus all \
   --ipc=container:pipeline-manager \
-	tracker-component:v1
+	tracker-component:v1 \
+	python server.py --service tracker
