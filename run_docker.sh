@@ -18,4 +18,4 @@ docker run -it \
 	--gpus all \
   --ipc=container:pipeline-manager \
 	tracker-component:v1 \
-	python server.py --service tracker --record_tracks --save_chips
+	python server.py --service tracker
