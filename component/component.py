@@ -25,9 +25,9 @@ class Component(BaseComponent):
         logging.info(f'processing frame id: {self.frame_id}')
 
         all_detections = [tuple((d[:4], d[4], self.classes_list[int(d[5])])) for d in raw_detections.tolist()]  # TODO change
-        logging.info(f'all detections: {all_detections}')
+        # logging.info(f'all detections: {all_detections}')
         all_tracks = self.tracker.update_tracks(frame=frame, raw_detections=all_detections)
-        logging.info(f'all tracks: {[vars(track) for track in all_tracks]}')
+        # logging.info(f'all tracks: {[vars(track) for track in all_tracks]}')
 
         # return tracks for drawing purposes
         result = []
@@ -38,5 +38,5 @@ class Component(BaseComponent):
             track_bb.append(track.track_id)
             result.append(track_bb)
         result = np.array(result, dtype='i4')
-
+        logging.info(f'confirmed tracks bb: {result}')
         return result
