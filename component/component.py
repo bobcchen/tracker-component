@@ -14,7 +14,7 @@ class Component(BaseComponent):
     def __init__(self, config):
         super().__init__(config)
 
-        self.classes_list = ['person']
+        self.classes_list = ['person', 'boat', 'traffic light', 'surfboard']
         self.tracker = DeepSort(max_age=30, nn_budget=10, embedder='torchreid')
 
         self.frame_id = 0
