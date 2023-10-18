@@ -22,7 +22,7 @@ class Component(BaseComponent):
 
     def process(self, frame, raw_detections):
         self.frame_id += 1
-        logging.info(f'processing frame id: {self.frame_id}')
+        # logging.info(f'processing frame id: {self.frame_id}')
 
         all_detections = [tuple((d[:4], d[4], self.classes_list[int(d[5])])) for d in raw_detections.tolist()]  # TODO change
         # logging.info(f'all detections: {all_detections}')
@@ -38,5 +38,6 @@ class Component(BaseComponent):
             track_bb.append(track.track_id)
             result.append(track_bb)
         result = np.array(result, dtype='i4')
-        logging.info(f'confirmed tracks bb: {result}')
+        # logging.info(f'confirmed tracks bb: {result}')
+        logging.info(len(result))
         return result
